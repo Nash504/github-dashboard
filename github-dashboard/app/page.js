@@ -2,26 +2,35 @@
 import { useEffect, useState } from 'react';
 
 export default function Home() {
-  const [data, setData] = useState(null);
+  const [users] = useState(['deiondz', 'Nash504', 'srijankulal']);
+  const [data, setData] = useState({});
 
-useEffect(() => {
-  fetch('/api/github')
-    .then((response) => {
-      if (!response.ok) throw new Error('Network response was not ok');
-      return response.json();
-    })
-    .then(setData)
-    .catch((err) => {
-      console.error(err);
-      setData({ error: err.message });
+  useEffect(() => {
+    users.forEach(user => {
+      fetch(`/api/github/?user=${user}`)
+        .then((response) => {
+          if (!response.ok) throw new Error('Network response was not ok');
+          return response.json();
+        })
+        .then((userData) => {
+          setData(prev => ({ ...prev, [user]: userData.contributions || [] }));
+        })
+        .catch((err) => {
+          console.error(err);
+          setData(prev => ({ ...prev, [user]: { error: err.message } }));
+        });
     });
-}, []);
-
+  }, [users]);
 
   return (
-    <main>
-      <h1>API says:</h1>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
-    </main>
+    <div>
+      <h1>GitHub Contributions</h1>
+      {users.map(user => (
+        <div key={user}>
+          <h2>{user}</h2>
+          <pre>{JSON.stringify(data[user], null, 2)}</pre>
+        </div>
+      ))}
+    </div>
   );
 }
