@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-
+import ExampleChart from '@/components/ExampleChart';
 export default function Home() {
   const [users] = useState(['deiondz', 'Nash504', 'srijankulal']);
   const [data, setData] = useState({});
@@ -31,6 +31,7 @@ export default function Home() {
           <pre>{JSON.stringify(data[user], null, 2)}</pre>
         </div>
       ))}
+      <ExampleChart users={data}/>
     </div>
   );
 }
