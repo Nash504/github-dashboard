@@ -101,7 +101,6 @@ export default function QuickLinks() {
           ))}
         </div>
 
-        {/* Alternative: Single Row Layout */}
        
       </div>
     );
