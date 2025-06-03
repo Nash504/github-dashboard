@@ -24,7 +24,7 @@ export default function ExampleChart({ users }) {
   const chartData = formatUsers(users);
 
   return (
-   <ChartContainer config={chartConfig} className="min-h-[20px] w-full max-w-2xl">
+   <ChartContainer config={chartConfig} className="h-60 w-full ">
   <ResponsiveContainer width="100%" height={300}>
    <BarChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
   <CartesianGrid strokeDasharray="3 3" />
@@ -47,7 +47,7 @@ export default function ExampleChart({ users }) {
     isAnimationActive={true}
     animationDuration={1000}
     animationEasing="ease-out"
-    label={{ position: "top", fill: "#c2f245", fontSize: 16 }}
+    label={{ position: "top", fill: "#c2f245", fontSize: 12 }}
   />
 </BarChart>
 
