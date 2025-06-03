@@ -7,6 +7,7 @@ import {
     Clock,
     Users,
     Star,
+    Sparkle,
     ExternalLink,
     Plus,
     Settings,
@@ -29,7 +30,8 @@ const defaultQuickLinks = [
   { id: "1", name: "GitHub", icon: Github, url: "https://github.com", bgColor: "bg-gradient-to-br from-gray-900 to-black" },
   { id: "2", name: "Localhost", icon: Globe, url: "http://localhost:3000", bgColor: "bg-gradient-to-br from-orange-500 to-red-600" },
   { id: "3", name: "Figma", icon: Figma, url: "https://www.figma.com/", bgColor: "bg-gradient-to-br from-purple-500 to-pink-500" },
-  { id: "4", name: "VSCode", icon: Code, url: "#", bgColor: "bg-gradient-to-br from-blue-600 to-blue-800" },
+  { id: "4", name: "Gemini", icon: Sparkle, url: "https://gemini.google.com/app", bgColor: "bg-gradient-to-br from-blue-600 to-blue-800" },
+  { id: "5", name: "Git Branches", icon: GitBranch, url: "#", bgColor: "bg-gradient-to-br from-green-500 to-green-700" },
 ];
 
 const openTab = (url) => {

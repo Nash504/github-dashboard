@@ -39,7 +39,7 @@ export default function Home() {
           <QuickLinks className="space-y-4" />
           {/* GitHub Contributions Section */}
           <div className="space-y-4 lg:col-span-2">
-            <Card className="bg-gray-800 text-white border-gray-700">
+            <Card className="bg-black text-white border-gray-700">
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
                   <Github className="h-4 w-4 sm:h-5 sm:w-5" />
