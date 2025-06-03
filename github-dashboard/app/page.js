@@ -8,8 +8,7 @@ import QuickLinks from '@/components/QuickLinks';
 import WeatherReport from '@/components/WeatherReport';
 
 export default function Home() {
-  const [users] = useState(['deiondz', 'Nash504', 'srijankulal','VinshMachado','shadow1951']);
-  const [data, setData] = useState({});
+ 
   const now = new Date();
   const formattedDateTime = now.toLocaleString('en-US', {
     month: 'numeric',
@@ -25,22 +24,7 @@ export default function Home() {
     window.open(url, '_blank');
   };
 
-  useEffect(() => {
-    users.forEach(user => {
-      fetch(`/api/github/?user=${user}`)
-        .then((response) => {
-          if (!response.ok) throw new Error('Network response was not ok');
-          return response.json();
-        })
-        .then((userData) => {
-          setData(prev => ({ ...prev, [user]: userData.contributions || [] }));
-        })
-        .catch((err) => {
-          console.error(err);
-          setData(prev => ({ ...prev, [user]: { error: err.message } }));
-        });
-    });
-  }, []);
+
 
   return (
     <div className="bg-gradient-to-br from-black via-gray-900 to-black min-h-screen py-8 px-4 sm:px-8">
@@ -64,7 +48,7 @@ export default function Home() {
               </CardHeader>
               <CardContent className="pt-0">
                 <div className="overflow-x-auto">
-                  <ExampleChart users={data} />
+                  <ExampleChart/>
                 </div>
               </CardContent>
             </Card>
