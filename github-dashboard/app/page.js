@@ -1,9 +1,10 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { Github } from 'lucide-react';
+import { Github ,Zap} from 'lucide-react';
 import ExampleChart from '@/components/ExampleChart';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import QuickLinks from '@/components/QuickLinks';
 import WeatherReport from '@/components/WeatherReport';
 import PomodoroTimer from '@/components/PomodoroTimer';
@@ -29,15 +30,23 @@ export default function Home() {
   return (
     <div className="bg-gradient-to-br from-black via-gray-900 to-black min-h-screen py-8 px-4 sm:px-8">
       <div className="max-w-6xl mx-auto space-y-6">
-        <div>
+        <div className='flex items-center justify-between mb-6'>
+          <div>
           <h1 className='text-white text-4xl mb-2'>Hello Nash</h1>
           <h2 className='text-white text-lg'>{formattedDateTime}</h2>
         </div>
+         <div> <Badge className="bg-lime-400 text-black mt-2 text-md">
+            <Zap className="inline-block mr-1" />
+            0 Streak
+          </Badge></div>
+        </div>
+       
+         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Weather Report Section */}
           <WeatherReport className="space-y-4" />
           <QuickLinks className="space-y-4" />
-          <PomodoroTimer/>
+          <PomodoroTimer />
           {/* GitHub Contributions Section */}
           <div className="space-y-4 lg:col-span-2">
             <Card className="bg-black text-white border-gray-700">
