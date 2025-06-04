@@ -6,7 +6,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import QuickLinks from '@/components/QuickLinks';
 import WeatherReport from '@/components/WeatherReport';
-
+import PomodoroTimer from '@/components/PomodoroTimer';
 export default function Home() {
  
   const now = new Date();
@@ -37,6 +37,7 @@ export default function Home() {
           {/* Weather Report Section */}
           <WeatherReport className="space-y-4" />
           <QuickLinks className="space-y-4" />
+          <PomodoroTimer/>
           {/* GitHub Contributions Section */}
           <div className="space-y-4 lg:col-span-2">
             <Card className="bg-black text-white border-gray-700">

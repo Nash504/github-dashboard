@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogHeader } from "@/components/ui/dialog";
-import { MapPin } from "lucide-react";
+import { MapPin,CloudSun } from "lucide-react";
 
 export default function WeatherReport() {
   const [weatherData, setWeatherData] = useState(null);
@@ -43,7 +43,8 @@ export default function WeatherReport() {
   return (
     <div className="space-y-4 sm:space-y-6">
       <Card className="bg-black text-white border-gray-700 h-full">
-        <CardHeader>
+        <CardHeader className="flex items-center  pb-4">
+          <CloudSun className="text-6xl"/>
           <CardTitle className="text-2xl font-semibold" style={{ color: '#c2f245' }}>Weather Report</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -99,12 +100,12 @@ export default function WeatherReport() {
 
         {weatherData ? (
           <div className="px-6 pb-6 ">
-            <div className="bg-black border border-white rounded-lg p-4 space-y-3 ">
+            <div className="bg-black rounded-lg p-4 space-y-3 ">
               <div className="flex items-center justify-between">
                 <h3 className="text-xl font-bold text-white">{weatherData.name}</h3>
                 <span className="text-3xl font-bold" style={{ color: '#c2f245' }}>{Math.round(weatherData.main.temp)}°C</span>
               </div>
-              
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm ">
                 <div className="space-y-2">
                   <p className="text-white">
