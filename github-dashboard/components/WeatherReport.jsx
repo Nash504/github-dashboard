@@ -41,9 +41,9 @@ export default function WeatherReport() {
   };
 
   return (
-    <div className="space-y-4 sm:space-y-6">
+    <div className="space-y-4 sm:space-y-4">
       <Card className="bg-black text-white border-gray-700 h-full">
-        <CardHeader className="flex items-center  pb-4">
+        <CardHeader className="flex items-center  ">
           <CloudSun className="text-6xl"/>
           <CardTitle className="text-2xl font-semibold" style={{ color: '#c2f245' }}>Weather Report</CardTitle>
         </CardHeader>
