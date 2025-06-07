@@ -9,8 +9,14 @@ import QuickLinks from '@/components/QuickLinks';
 import WeatherReport from '@/components/WeatherReport';
 import PomodoroTimer from '@/components/PomodoroTimer';
 export default function Home() {
- 
+ const [sessions, setSessions] = useState(() => {
+   const stored = localStorage.getItem('pomodoro_sessions');
+   return stored ? parseInt(stored) : 0;
+  
+ });
   const now = new Date();
+   const today = new Date().toDateString();
+
   const formattedDateTime = now.toLocaleString('en-US', {
     month: 'numeric',
     day: 'numeric',
@@ -37,7 +43,7 @@ export default function Home() {
         </div>
          <div> <Badge className="bg-lime-400 text-black mt-2 text-md">
             <Zap className="inline-block mr-1" />
-            0 Streak
+            {sessions} {today} Streak
           </Badge></div>
         </div>
        
