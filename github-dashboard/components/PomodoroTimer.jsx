@@ -31,18 +31,32 @@ export default function PomodoroTimer() {
         setStreak(newStreak);
         localStorage.setItem('visit_data', JSON.stringify({ date: today, streak: newStreak }));
     }, []);
+useEffect(() => {
+  if (duration <= 0) {
+    setIsPlaying(false);
+    setIsBreak(!isBreak);
+    setDuration(isBreak ? 25 * 60 : 5 * 60);
 
-    useEffect(() => {
-        if (duration <= 0) {
-            setIsPlaying(false);
-            setIsBreak(!isBreak);
-            setDuration(isBreak ? 25 * 60 : 5 * 60); // 25min work, 5min break
+    // Notify user when timer ends
+    if (Notification.permission === 'granted') {
+      new Notification('Timer done!', {
+        body: isBreak ? 'Break over! Time to focus.' : 'Focus session done! Take a break.',
+      });
+    } else if (Notification.permission !== 'denied') {
+      Notification.requestPermission().then(permission => {
+        if (permission === 'granted') {
+          new Notification('Timer done!', {
+            body: isBreak ? 'Break over! Time to focus.' : 'Focus session done! Take a break.',
+          });
         }
+      });
+    }
+  }
 
-        if (!isPlaying) return;
-        const timer = setInterval(() => setDuration(prev => prev - 1), 1000);
-        return () => clearInterval(timer);
-    }, [isPlaying, duration, isBreak]);
+  if (!isPlaying) return;
+  const timer = setInterval(() => setDuration(prev => prev - 1), 1000);
+  return () => clearInterval(timer);
+}, [isPlaying, duration, isBreak]);
 
     const minutes = Math.floor(duration / 60);
     const seconds = duration % 60;
@@ -50,7 +64,7 @@ export default function PomodoroTimer() {
         ((isBreak ? 5 * 60 : 25 * 60) - duration) / (isBreak ? 5 * 60 : 25 * 60) * 100;
 
     return (
-        <Card className="bg-gray-900/50 border-gray-800 text-white">
+        <Card className="bg-black  border border-zinc-800 hover:border-zinc-700 transition-colors duration-300 text-white">
             <CardHeader className="flex flex-row items-center space-y-0 pb-3">
                 {isBreak ? (
                     <Coffee className="w-5 h-5 text-[#c2f245]" />
@@ -98,6 +112,15 @@ export default function PomodoroTimer() {
                             <Play className="w-4 h-4 mr-2" />
                         )}
                         {isPlaying ? 'Pause' : 'Start'}
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            setIsPlaying(false);
+                            setDuration(25 * 60);
+                            setIsBreak(false);
+                        }}
+                    >
+                        Reset
                     </Button>
                 </div>
 

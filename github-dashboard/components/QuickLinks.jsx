@@ -1,6 +1,6 @@
 "use client"
 
-import { Github, Globe, GitBranch, Sparkle,  Volleyball, Figma } from "lucide-react"
+import { Github, Globe, GitBranch, Sparkle,  Volleyball, Figma,Link } from "lucide-react"
 
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -72,8 +72,10 @@ export default function QuickLinks() {
   return (
     <div className="space-y-6">
       <Card className="bg-black border border-zinc-800 hover:border-zinc-700 transition-colors duration-300">
-        <CardHeader>
-          <CardTitle className="text-lg text-white">Quick Access</CardTitle>
+        <CardHeader className='text-white flex'>
+             <Link/> 
+          <CardTitle className="text-lg text-white">
+         Quick Access</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 gap-3">
