@@ -6,7 +6,7 @@ import { Play, Pause, Timer, Coffee } from 'lucide-react';
 
 export default function PomodoroTimer() {
     const [isPlaying, setIsPlaying] = useState(false);
-    const [duration, setDuration] = useState(10);
+    const [duration, setDuration] = useState(25*60);
     const [streak, setStreak] = useState(1);
     const [isBreak, setIsBreak] = useState(false);
 
