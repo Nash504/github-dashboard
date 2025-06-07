@@ -15,6 +15,8 @@ export default function Home() {
     'srijankulal',
     'VinshMachado',
     'shadow1951',
+    'TheJonathanC',
+  
   ]);
   const [data, setData] = useState({});
   const [streak, setStreak] = useState(() => {
@@ -107,16 +109,18 @@ export default function Home() {
         {/* GitHub Contributions */}
         <div className="lg:col-span-2">
           <Card className="bg-black text-white border-gray-700">
-            <CardHeader className="pb-4">
-              <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
+            <CardHeader className="pb-4 justify-between flex items-center">
+              <CardTitle className="flex items-center  gap-2 text-lg sm:text-xl">
                 <Github className="h-5 w-5" />
                 GitHub Contributions
+
               </CardTitle>
+                <RotateCcw onClick={handleAPI} />
             </CardHeader>
             <CardContent className="pt-0">
               <div className="overflow-x-auto">
-                <RotateCcw onClick={handleAPI} />
-                <ExampleChart stuff={data} />
+              
+                <ExampleChart data={data} />
               </div>
             </CardContent>
           </Card>

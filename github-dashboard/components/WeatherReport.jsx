@@ -76,7 +76,7 @@ export default function WeatherReport() {
               <DialogTrigger asChild>
                 <Button
                   variant="outline"
-                  className="flex items-center gap-2 w-full sm:w-auto border-cyan-400 bg-transparent text-cyan-400"
+                  className="flex items-center gap-2 w-full sm:w-auto border-cyan-400 bg-transparent text-cyan-400 hover:bg-transparent hover:text-cyan-300 transform transition-transform duration-200 hover:scale-105"
                 >
                   <MapPin size={16} />
                   Change Location
@@ -91,10 +91,7 @@ export default function WeatherReport() {
                 <div className="space-y-4 pt-4">
                   <Input
                     className="bg-black text-white border-white"
-                    style={{
-                      focusBorderColor: "#22D3EE",
-                      "--tw-ring-color": "#22D3EE",
-                    }}
+                   
                     type="text"
                     placeholder="Enter city name"
                     value={tempLocation}

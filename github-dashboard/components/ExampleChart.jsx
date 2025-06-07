@@ -19,8 +19,8 @@ function formatUsers(usersObj) {
   });
 }
 
-export default function ExampleChart({ stuff }) {
-  const chartData = formatUsers(stuff);
+export default function ExampleChart({ data}) {
+  const chartData = formatUsers(data);
 
   return (
     <ChartContainer config={chartConfig} className="h-60 w-full">
@@ -42,7 +42,7 @@ export default function ExampleChart({ stuff }) {
           <Bar
             dataKey="contributions"
             fill="#c2f245"
-            radius={[10, 10, 0, 0]}
+            radius={[10, 10, 10, 10]}
             isAnimationActive={true}
             animationDuration={1000}
             animationEasing="ease-out"
