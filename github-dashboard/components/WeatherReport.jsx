@@ -23,8 +23,6 @@ import {
   Cloud,
 } from "lucide-react";
 
-import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField'
 
 export default function WeatherReport() {
   const [weatherData, setWeatherData] = useState(null);
@@ -37,22 +35,8 @@ export default function WeatherReport() {
 
 
 
-  useEffect(() => {
-    fetch("https://countriesnow.space/api/v0.1/countries/positions")
-      .then(res => res.json())
-      .then(data => {
-        const names = data.map(c => c.name.common).sort();
-        localStorage.setItem("countries", JSON.stringify(names));
-      });
-  }, []);
-
-  useEffect(() => {
-    const storedCountries = localStorage.getItem("countries");
-    if (storedCountries) {
-      setCountries(JSON.parse(storedCountries));
-    }
-  }, []);
-
+ 
+ 
 
 
   useEffect(() => {
@@ -113,12 +97,7 @@ export default function WeatherReport() {
                   </DialogTitle>
                 </DialogHeader>
                 <div className="space-y-4 pt-4">
-                  <Autocomplete
-      options={countries}
-      className="bg-black text-white border-white"
-      renderInput={(params) => <TextField {...params} label="Country" />}
-      sx={{ width: 300 }}
-    />
+               
                   <Input
                     className="bg-black text-white border-white"
                    
