@@ -169,7 +169,7 @@ export default function PomodoroTimer() {
                 <div className="flex justify-center gap-3">
                     <Button
                         onClick={handlePlayPause}
-                        className="bg-[#c2f245] text-black px-6"
+                        className="bg-[#c2f245] hover:bg-lime-400 hover:text-black text-black px-6"
                     >
                         {isPlaying ? (
                             <Pause className="w-4 h-4 mr-2" />

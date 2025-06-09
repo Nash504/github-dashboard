@@ -3,12 +3,15 @@
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { ChartConfig, ChartContainer } from "@/components/ui/chart";
 
+
 const chartConfig = {
   contributions: {
     label: "Contributions",
     color: "#c2f245",
   },
 };
+
+
 
 // Helper to clean the user contributions
 function formatUsers(usersObj) {
@@ -29,6 +32,7 @@ export default function ExampleChart({ data}) {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
           <YAxis />
+     
           <Tooltip
             contentStyle={{
               backgroundColor: "#1f2937",

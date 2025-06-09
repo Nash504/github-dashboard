@@ -8,6 +8,7 @@ import WeatherReport from '@/components/WeatherReport';
 import PomodoroTimer from '@/components/PomodoroTimer';
 import QuickLinks from '@/components/QuickLinks';
 
+
 export default function Home() {
   const [users] = useState([
     'deiondz',
