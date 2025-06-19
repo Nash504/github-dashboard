@@ -16,8 +16,8 @@ import React, { useEffect, useState, useCallback } from "react";
 export default function GitHubUserModal() {
   const [users, setUsers] = useState([]);
   const [data, setData] = useState({});
-  const [isAddUserDialogOpen, setIsAddUserDialogOpen] = useState(false); // State for Add User Dialog
-  const [isSettingsDialogOpen, setIsSettingsDialogOpen] = useState(false); // New state for Settings Dialog
+  // Renamed for clarity: this dialog will now handle both adding and managing
+  const [isManageUsersDialogOpen, setIsManageUsersDialogOpen] = useState(false);
   const [newUserName, setNewUserName] = useState("");
 
   // Fetches GitHub contributions for a given username
@@ -26,6 +26,7 @@ export default function GitHubUserModal() {
       const response = await fetch(`/api/github/?user=${username}`);
       if (!response.ok) {
         throw new Error(`Network response was not ok for ${username}`);
+        return [];
       }
       const userData = await response.json();
       return userData.contributions || [];
@@ -90,16 +91,18 @@ export default function GitHubUserModal() {
       const updatedUsers = [...users, trimmedUserName];
       setUsers(updatedUsers);
       localStorage.setItem("github_users", JSON.stringify(updatedUsers));
-      setNewUserName("");
-      setIsAddUserDialogOpen(false); // Close the Add User dialog
+      setNewUserName(""); // Clear the input field after adding
+      // No need to close dialog here, as it stays open for further management
     } else if (users.includes(trimmedUserName)) {
       alert("This user is already in your list.");
     }
   };
 
-  // Handles refreshing all GitHub user data
-  const handleRefreshData = () => {
-    setUsers([...users]); // Triggers re-fetch via useEffect
+  // Handles deleting a GitHub user
+  const handleDeleteUser = (userToDelete) => {
+    const updatedUsers = users.filter((user) => user !== userToDelete);
+    setUsers(updatedUsers);
+    localStorage.setItem("github_users", JSON.stringify(updatedUsers));
   };
 
   return (
@@ -111,18 +114,10 @@ export default function GitHubUserModal() {
             GitHub Contributions
           </CardTitle>
           <div className="flex items-center gap-2">
-            {/* Settings Icon to open the new Settings Dialog */}
+            {/* The Settings icon will now open the combined "Manage Users" dialog */}
             <Settings
-              className="h-5 text-gray-400 cursor-pointer"
-              onClick={() => setIsSettingsDialogOpen(true)}
-            />
-            <Plus
-              onClick={() => setIsAddUserDialogOpen(true)} // Opens the Add User dialog
-              className="h-5 text-gray-400 cursor-pointer"
-            />
-            <RotateCcw
-              className="h-5 cursor-pointer"
-              onClick={handleRefreshData}
+              className="h-10 text-gray-400 cursor-pointer"
+              onClick={() => setIsManageUsersDialogOpen(true)}
             />
           </div>
         </CardHeader>
@@ -133,73 +128,65 @@ export default function GitHubUserModal() {
         </CardContent>
       </Card>
 
-      {/* Add User Dialog */}
-      <Dialog open={isAddUserDialogOpen} onOpenChange={setIsAddUserDialogOpen}>
-        <DialogContent className="bg-black text-white border-white max-w-md">
-          <DialogHeader>
-            <DialogTitle className="text-white">Add GitHub User</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4 pt-4">
-            <Input
-              className="bg-black text-white border-white"
-              type="text"
-              placeholder="Enter GitHub user name"
-              value={newUserName}
-              onChange={(e) => setNewUserName(e.target.value)}
-              onKeyPress={(e) => e.key === "Enter" && handleAddUser()}
-            />
-            <div className="flex gap-2 justify-end">
-              <Button
-                variant="outline"
-                className="border-white text-white bg-black"
-                onClick={() => setIsAddUserDialogOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                className="text-black"
-                style={{ backgroundColor: "#c2f245" }}
-                onClick={handleAddUser}
-              >
-                Add User
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* NEW: Settings Dialog */}
+      {/* Combined Manage Users Dialog */}
       <Dialog
-        open={isSettingsDialogOpen}
-        onOpenChange={setIsSettingsDialogOpen}
+        open={isManageUsersDialogOpen}
+        onOpenChange={setIsManageUsersDialogOpen}
       >
         <DialogContent className="bg-black text-white border-white max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-white">Settings</DialogTitle>
+            <DialogTitle className="text-white">
+              Manage GitHub Users
+            </DialogTitle>
           </DialogHeader>
 
-          <div className="flex gap-2">
-            <p className="text-sm text-gray-400 flex flex-col">
-              {users.map((user, index) => (
-                <span key={index} className="text-sm text-gray-400">
-                  {user}
-                  <Button
-                    onClick={() => {
-                      const updatedUsers = users.filter((u) => u !== user);
-                      setUsers(updatedUsers);
-                      localStorage.setItem(
-                        "github_users",
-                        JSON.stringify(updatedUsers)
-                      );
-                    }}
-                    className="ml-2 p-1 text-red-500 hover:text-red-700"
-                  >
-                    <Trash2 />
-                  </Button>
-                </span>
-              ))}
-            </p>
+          {/* Input for adding new users */}
+          <div className="space-y-4 pt-4">
+            <div className="flex gap-2">
+              <Input
+                className="flex-grow bg-black text-white border-gray-600 focus:border-cyan-400"
+                type="text"
+                placeholder="Enter GitHub user name to add"
+                value={newUserName}
+                onChange={(e) => setNewUserName(e.target.value)}
+                onKeyPress={(e) => e.key === "Enter" && handleAddUser()}
+              />
+              <Button
+                className="text-black min-w-[80px]" // Added min-width for consistent button size
+                style={{ backgroundColor: "#c2f245" }}
+                onClick={handleAddUser}
+              >
+                Add
+              </Button>
+            </div>
           </div>
+
+          {/* List of current users with delete option */}
+          <div className="mt-6 space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
+            {users.length > 0 ? (
+              users.map((user) => (
+                <div
+                  key={user}
+                  className="flex items-center justify-between p-4 rounded-md bg-black hover:scale-105 duration-100 border border-white/10"
+                >
+                  <span className="text-sm text-gray-200">{user}</span>
+                  <Button
+                    onClick={() => handleDeleteUser(user)}
+                    variant="ghost"
+                    className="text-red-400 hover:bg-red-900/20 hover:text-red-300 p-1 h-auto"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))
+            ) : (
+              <p className="text-sm text-gray-400 text-center py-4">
+                No users added yet. Add some above to get started!
+              </p>
+            )}
+          </div>
+
+          <div className="flex gap-2 justify-end mt-4"></div>
         </DialogContent>
       </Dialog>
     </div>
