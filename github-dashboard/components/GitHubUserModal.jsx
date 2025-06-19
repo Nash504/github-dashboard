@@ -174,12 +174,6 @@ export default function GitHubUserModal() {
     }
   };
 
-  // Handles refreshing all GitHub user data
-  const handleRefreshData = () => {
-    // This trick re-renders the component and triggers the useEffect to re-fetch data
-    setUsers([...users]);
-  };
-
   return (
     <div className="lg:col-span-2">
       <Card className="bg-black text-white border-gray-700">
@@ -191,19 +185,10 @@ export default function GitHubUserModal() {
           <div className="flex items-center gap-2">
             {/* Settings icon to open the user management dialog */}
             <Settings
-              className="h-5 text-gray-400 cursor-pointer" // Adjusted height to h-5 for consistency
+              className="h-10 text-gray-400 cursor-pointer" // Adjusted height to h-5 for consistency
               onClick={() => setIsManageUsersDialogOpen(true)}
             />
             {/* Plus icon to quickly add user (also opens management dialog) */}
-            <Plus
-              onClick={() => setIsManageUsersDialogOpen(true)}
-              className="h-5 text-gray-400 cursor-pointer"
-            />
-            {/* Refresh icon */}
-            <RotateCcw
-              className="h-5 cursor-pointer"
-              onClick={handleRefreshData}
-            />
           </div>
         </CardHeader>
         <CardContent className="pt-0">
@@ -255,11 +240,11 @@ export default function GitHubUserModal() {
               </Button>
               {/* Suggestions Dropdown */}
               {showSuggestions && userSuggestions.length > 0 && (
-                <ul className="absolute z-10 w-full bg-gray-900 border border-gray-700 rounded-md mt-1 max-h-40 overflow-y-auto shadow-lg top-full">
+                <ul className="absolute z-10 w-full bg-black border border-gray-700 rounded-md mt-1 max-h-40 overflow-y-auto shadow-lg top-full">
                   {userSuggestions.map((user) => (
                     <li
                       key={user}
-                      className="p-2 cursor-pointer hover:bg-gray-700 text-sm text-white"
+                      className="p-2 cursor-pointer hover:bg-white/10 text-sm text-white"
                       onClick={() => handleSelectSuggestion(user)}
                     >
                       {user}
@@ -276,7 +261,7 @@ export default function GitHubUserModal() {
               users.map((user) => (
                 <div
                   key={user}
-                  className="flex items-center justify-between p-2 rounded-md bg-gray-800 hover:bg-gray-700 hover:scale-105 transition-all duration-200 border border-white/10"
+                  className="flex items-center justify-between p-2 rounded-md bg-black  transition-all duration-200 border border-white/10"
                 >
                   <span className="text-sm text-gray-200">{user}</span>
                   <Button
@@ -295,15 +280,7 @@ export default function GitHubUserModal() {
             )}
           </div>
 
-          <div className="flex gap-2 justify-end mt-4">
-            <Button
-              variant="outline"
-              className="border-white text-white bg-black hover:bg-gray-800"
-              onClick={() => setIsManageUsersDialogOpen(false)}
-            >
-              Close
-            </Button>
-          </div>
+          <div className="flex gap-2 justify-end mt-4"></div>
         </DialogContent>
       </Dialog>
     </div>
