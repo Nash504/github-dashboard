@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // Import useEffect
 import {
   Dialog,
   DialogContent,
@@ -78,6 +78,17 @@ const colorOptions = [
   },
 ];
 
+// Helper function to get color styles
+const getColorStyles = (colorValue) => {
+  const color =
+    colorOptions.find((c) => c.value === colorValue) || colorOptions[3];
+  return {
+    border: color.border,
+    icon: color.icon,
+    glow: `shadow-[0_0_8px_rgba(59,130,246,0.4)]`,
+  };
+};
+
 const defaultQuickLinks = [
   {
     id: "1",
@@ -119,25 +130,59 @@ const defaultQuickLinks = [
 
 export default function QuickLinks() {
   const [isIconViewerOpen, setIsIconViewerOpen] = useState(false);
+  const [quickLinks, setQuickLinks] = useState([]); // Initialize as empty array
 
-  const getColorStyles = (colorValue) => {
-    const color =
-      colorOptions.find((c) => c.value === colorValue) || colorOptions[3];
-    return {
-      border: color.border,
-      icon: color.icon,
-      glow: `shadow-[0_0_8px_rgba(59,130,246,0.4)]`,
-    };
-  };
+  // Load quick links from localStorage on component mount
+  useEffect(() => {
+    try {
+      const storedLinks = localStorage.getItem("quickLinks");
+      if (storedLinks) {
+        const parsedLinks = JSON.parse(storedLinks).map((link) => ({
+          ...link,
+          // Re-map icon component and styles as they are not serialized in localStorage
+          icon: getIconComponent(link.name), // You'll need a helper for this
+          borderColor: getColorStyles(link.color).border,
+          glowColor: getColorStyles(link.color).glow,
+          iconColor: getColorStyles(link.color).icon,
+        }));
+        setQuickLinks(parsedLinks);
+      } else {
+        // If no links in localStorage, set default links
+        const initialLinks = defaultQuickLinks.map((link) => ({
+          ...link,
+          borderColor: getColorStyles(link.color).border,
+          glowColor: getColorStyles(link.color).glow,
+          iconColor: getColorStyles(link.color).icon,
+        }));
+        setQuickLinks(initialLinks);
+        localStorage.setItem("quickLinks", JSON.stringify(initialLinks));
+      }
+    } catch (error) {
+      console.error("Error loading quick links from localStorage:", error);
+      // Fallback to default if there's an error parsing
+      const initialLinks = defaultQuickLinks.map((link) => ({
+        ...link,
+        borderColor: getColorStyles(link.color).border,
+        glowColor: getColorStyles(link.color).glow,
+        iconColor: getColorStyles(link.color).icon,
+      }));
+      setQuickLinks(initialLinks);
+    }
+  }, []); // Empty dependency array means this runs once on mount
 
-  const [quickLinks, setQuickLinks] = useState(
-    defaultQuickLinks.map((link) => ({
-      ...link,
-      borderColor: getColorStyles(link.color).border,
-      glowColor: getColorStyles(link.color).glow,
-      iconColor: getColorStyles(link.color).icon,
-    }))
-  );
+  // Save quick links to localStorage whenever quickLinks state changes
+  useEffect(() => {
+    if (quickLinks.length > 0) {
+      // Only save if there are links
+      const serializableLinks = quickLinks.map(({ icon, ...rest }) => ({
+        ...rest,
+        // When saving, we need to save a string identifier for the icon
+        // as React components cannot be directly stringified.
+        iconName: icon.displayName || icon.name,
+      }));
+      localStorage.setItem("quickLinks", JSON.stringify(serializableLinks));
+    }
+  }, [quickLinks]);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -156,8 +201,9 @@ export default function QuickLinks() {
       const newLink = {
         id: Date.now().toString(),
         name: formData.name,
-        icon: formData.icon,
+        icon: formData.icon, // This is the actual Lucide icon component
         url: formData.url,
+        color: formData.color, // Store the raw color value for serialization
         borderColor: colorStyle.border,
         glowColor: colorStyle.glow,
         iconColor: colorStyle.icon,
@@ -165,6 +211,40 @@ export default function QuickLinks() {
       setQuickLinks((prev) => [...prev, newLink]);
       setFormData({ name: "", url: "", color: "blue", icon: Link });
       setIsIconViewerOpen(false);
+    }
+  };
+
+  const deleteLink = (idToDelete) => {
+    setQuickLinks((prev) => {
+      const updatedLinks = prev.filter((link) => link.id !== idToDelete);
+      return updatedLinks;
+    });
+  };
+
+  // Helper to get the actual Lucide icon component from its name
+  // You'll need to expand this as you add more selectable icons in your form.
+  const getIconComponent = (iconName) => {
+    switch (iconName) {
+      case "Github":
+        return Github;
+      case "Globe":
+        return Globe;
+      case "Figma":
+        return Figma;
+      case "Sparkle":
+        return Sparkle;
+      case "GitBranch":
+        return GitBranch;
+      case "Volleyball":
+        return Volleyball;
+      case "Link":
+        return Link;
+      case "X":
+        return X; // If X is ever a selectable icon for a link
+      case "Settings":
+        return Settings; // If Settings is ever a selectable icon for a link
+      default:
+        return Link; // Default to Link icon if not found
     }
   };
 
@@ -182,8 +262,6 @@ export default function QuickLinks() {
           />
         </CardHeader>
         <CardContent className="max-h-[300px] overflow-y-auto pr-2">
-          {" "}
-          {/* Added max-h and overflow-y-auto */}
           <div className="grid grid-cols-2 gap-3">
             {quickLinks.map((link) => (
               <div key={link.id} className="relative group">
@@ -197,15 +275,11 @@ export default function QuickLinks() {
                   <link.icon className={`w-6 h-6 ${link.iconColor}`} />
                   <span className="text-xs font-medium">{link.name}</span>
                 </Button>
-                {quickLinks.length > 6 && (
+                {quickLinks.length > 6 && ( // Only show delete button if there are more than 6 links
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() =>
-                      setQuickLinks((prev) =>
-                        prev.filter((l) => l.id !== link.id)
-                      )
-                    }
+                    onClick={() => deleteLink(link.id)} // Call deleteLink function
                     className="absolute -top-2 -right-2 w-6 h-6 p-0 bg-red-500 hover:bg-red-600 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     <X className="w-3 h-3" />
