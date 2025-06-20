@@ -3,7 +3,6 @@
 import { NextResponse } from "next/server";
 
 export async function GET(request) {
-  // Extract the 'q' (query) parameter from the request URL
   const { searchParams } = new URL(request.url);
   const q = searchParams.get("q");
 
@@ -27,11 +26,6 @@ export async function GET(request) {
         // 'Accept' header is recommended by GitHub API documentation
         Accept: "application/vnd.github.v3+json",
         //
-        // If you have a GitHub Personal Access Token (PAT) for higher rate limits,
-        // use it here. Store it securely in an environment variable (e.g., process.env.GITHUB_PAT).
-        // DO NOT hardcode your PAT directly in this file!
-        // Example:
-        // 'Authorization': `Bearer ${process.env.GITHUB_PAT}`,
       },
       // You might also add revalidate options if using Next.js caching
       // next: { revalidate: 60 } // Revalidate every 60 seconds
