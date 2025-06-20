@@ -1,6 +1,12 @@
 "use client";
 import React, { useState } from "react";
-import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   Github,
   Globe,
@@ -13,11 +19,14 @@ import {
   Trash,
   Settings2,
   Settings,
+  Search,
+  X,
 } from "lucide-react";
-import * as LucideIcons from "lucide-react";
+
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import allLucideIcons from "@/lib/lucide-icons";
+import { Input } from "@/components/ui/input";
+
 const defaultQuickLinks = [
   {
     id: "1",
@@ -76,9 +85,9 @@ const defaultQuickLinks = [
 ];
 
 export default function QuickLinks() {
-  // Move useState and openTab inside the component
   const [isIconViewerOpen, setIsIconViewerOpen] = useState(false);
-  console.log("Loaded icons:", Object.keys(allLucideIcons));
+  const [LinkName, setLinkName] = useState("");
+
   const openTab = (url) => {
     if (url !== "#") {
       window.open(url, "_blank");
@@ -87,14 +96,12 @@ export default function QuickLinks() {
 
   return (
     <div className="space-y-6">
-      <Card className="bg-black border border-zinc-800 hover:border-zinc-700 transition-colors duration-300 hover:">
+      <Card className="bg-black border border-zinc-800 hover:border-zinc-700 transition-colors duration-300">
         <CardHeader className="text-white flex">
           <Link />
           <CardTitle className="text-lg text-white">Quick Access</CardTitle>
           <Settings
-            className="ml-auto h-5 text-white/60 cursor-pointer hover:text-gray-300"
-            // You had onClick={() => isLinkOpen} which just evaluates the variable.
-            // It should be onClick={() => setIsLinkOpen(true)} to open the dialog.
+            className="ml-auto h-5 text-white/60 cursor-pointer hover:text-gray-300 transition-colors duration-200"
             onClick={() => setIsIconViewerOpen(true)}
           />
         </CardHeader>
@@ -105,7 +112,7 @@ export default function QuickLinks() {
                 key={link.id}
                 variant="outline"
                 onClick={() => openTab(link.url)}
-                className={`h-20 flex flex-col items-center justify-center gap-2 bg-black hover:bg-black hover:text-white text-white  ${link.borderColor}  duration-200 hover:scale-105`}
+                className={`h-20 flex flex-col items-center justify-center gap-2 bg-black hover:bg-black hover:text-white text-white ${link.borderColor} duration-200 hover:scale-105 transition-all`}
               >
                 <link.icon className={`w-6 h-6 ${link.iconColor}`} />
                 <span className="text-xs font-medium">{link.name}</span>
@@ -114,34 +121,47 @@ export default function QuickLinks() {
           </div>
         </CardContent>
       </Card>
+
       <Dialog open={isIconViewerOpen} onOpenChange={setIsIconViewerOpen}>
-        <DialogContent className="bg-black text-white">
-          <div className="p-4 overflow-y-auto grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4 custom-scrollbar">
-            {/*
-              This is where the "API call" to display logos happens.
-              1. `Object.keys(allLucideIcons)` gets an array of all icon names (e.g., "Github", "Figma").
-              2. `.map()` iterates over each icon name.
-              3. `allLucideIcons[iconName]` retrieves the actual React component for that name.
-              4. `<IconComponent ... />` renders the icon.
-            */}
+        <DialogContent className="bg-gradient-to-br from-zinc-900 via-black to-zinc-900 text-white border-zinc-800 max-w-6xl max-h-[80vh] p-0 overflow-hidden">
+          {/* Header */}
+          <DialogHeader className="px-6 py-4 border-b border-zinc-800 bg-black/50 backdrop-blur-sm">
+            <div className="relative mt-4">
+              <Input
+                placeholder="Link Name"
+                value={LinkName}
+                onChange={(e) => setLinkName(e.target.value)}
+                className="pl-10 bg-zinc-800/50 border-zinc-700 text-white placeholder:text-zinc-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-200"
+              />
+            </div>
+            <div className="relative mt-4">
+              <Input
+                placeholder="URL"
+                value={LinkName}
+                onChange={(e) => setLinkName(e.target.value)}
+                className="pl-10 bg-zinc-800/50 border-zinc-700 text-white placeholder:text-zinc-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-200"
+              />
+              <div className="relative mt-4">
+                <Input
+                  placeholder="color"
+                  value={LinkName}
+                  onChange={(e) => setLinkName(e.target.value)}
+                  className="pl-10 bg-zinc-800/50 border-zinc-700 text-white placeholder:text-zinc-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-200"
+                />
+              </div>
+            </div>
+          </DialogHeader>
 
-            {Object.keys(allLucideIcons).map((iconName) => {
-              const IconComponent = allLucideIcons[iconName]; // Get the component from your "API"
+          {/* Icon Grid */}
 
-              return (
-                <Card
-                  key={iconName} // React requires a unique key for each item in a list
-                  className="flex flex-col items-center justify-center p-2 border border-zinc-800 rounded-md hover:bg-zinc-700 cursor-pointer transition-colors duration-200"
-                  // We're just displaying them for now; no click action for selection yet.
-                >
-                  <IconComponent className="w-8 h-8 text-white mb-1" />{" "}
-                  {/* Render the icon */}
-                  <span className="text-xs text-zinc-300 text-center break-words max-w-full">
-                    {iconName} {/* Display the name of the icon */}
-                  </span>
-                </Card>
-              );
-            })}
+          {/* Footer */}
+          <div className="px-6 py-3 border-t border-zinc-800 bg-black/30 backdrop-blur-sm">
+            <div className="flex items-center justify-between text-xs text-zinc-400">
+              <span>Click an icon to select it</span>
+              <span className="flex items-center gap-1">
+                Powered by <span className="text-blue-400">Lucide Icons</span>
+              </span>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
